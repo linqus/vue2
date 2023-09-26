@@ -6,3 +6,11 @@
 export function getCurrentCategoryId() {
     return window.currentCategoryId;
 }
+/**
+ * Returns the current product id
+ *
+ * @returns {string|null}
+ */
+export function getCurrentProductId() {
+    return window.currentProductId;
+}
