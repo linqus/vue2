@@ -25,3 +25,11 @@ export function fetchFeaturedProducts() {
         params: { featured: 1 },
     });
 }
+/**
+ *
+ * @param {string|null} productIri
+ * @returns {Promise}
+ */
+export function fetchProductById(productIri) {
+    return axios.get(productIri);
+}
