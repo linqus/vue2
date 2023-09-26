@@ -3,8 +3,7 @@
         <div class="row">
             <div class="col-3">
                 <title-component
-                    :current-category-id="currentCategoryId"
-                    :categories="categories"
+                    :text="categoryName"
                 />
             </div>
             <div class="col-9">
@@ -55,6 +54,17 @@ export default {
             legend: 'Shipping takes 10-13 weeks, and products probably won\'t work',
             searchTerm: null,
         };
+    },
+    computed: {
+        categoryName() {
+            if (this.currentCategoryId === null) {
+                return 'All Products';
+            }
+
+            const category = this.categories.find((cat) => (cat['@id'] === this.currentCategoryId));
+
+            return category ? category.name : '';
+        },
     },
     watch: {
         currentCategoryId() {
