@@ -54,6 +54,7 @@
 
 <script>
 import { fetchProductById } from '@/services/products-service';
+import { fetchCart } from '@/services/cart-service.js';
 import formatPrice from '@/helpers/format-price';
 import Loading from '@/components/loading';
 import TitleComponent from '@/components/title';
@@ -74,6 +75,7 @@ export default {
     },
     data() {
         return {
+            cart: null,
             product: null,
             loading: true,
         };
@@ -84,6 +86,10 @@ export default {
         },
     },
     async created() {
+        fetchCart().then((cart) => {
+            this.cart = cart;
+        });
+
         try {
             this.product = (await fetchProductById(this.currentProductId)).data;
         } finally {
