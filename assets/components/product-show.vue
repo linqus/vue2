@@ -38,13 +38,22 @@
                                 class="form-control mx-3"
                                 type="number"
                                 min="1"
+                                v-model="quantity"
                             >
                             <button
                                 class="btn btn-info btn-sm"
                                 :disabled="cart === null"
                                 @click="addToCart"
                             >
-                                Add to Cart
+                                Add to Cart 
+                                <i
+                                    v-show="addToCartLoading"
+                                    class="fa fa-spinner fa-spin"
+                                />
+                                <i
+                                    v-show="addToCartSuccess"
+                                    class="fa fa-check"
+                                />
                             </button>
                         </div>
                     </div>
@@ -79,7 +88,10 @@ export default {
         return {
             cart: null,
             product: null,
+            quantity: 1,
             loading: true,
+            addToCartLoading: false,
+            addToCartSuccess: false,
         };
     },
     computed: {
@@ -99,12 +111,16 @@ export default {
         }
     },
     methods: {
-        addToCart() {
-            addItemToCart(this.cart, {
+        async addToCart() {
+            this.addToCartLoading = true;
+            this.addToCartSuccess = false;
+            await addItemToCart(this.cart, {
                 product: this.product['@id'],
                 color: null,
-                quantity: 1,
+                quantity: parseInt(this.quantity, 10),
             });
+            this.addToCartLoading = false;
+            this.addToCartSuccess = true;
         },
     },
 };
