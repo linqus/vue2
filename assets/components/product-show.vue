@@ -46,7 +46,7 @@
                                 :disabled="cart === null"
                                 @click="addToCart"
                             >
-                                Add to Cart 
+                                Add to Cart
                                 <i
                                     v-show="addToCartLoading"
                                     class="fa fa-spinner fa-spin"
@@ -66,7 +66,11 @@
 
 <script>
 import { fetchProductById } from '@/services/products-service';
-import { fetchCart, addItemToCart } from '@/services/cart-service.js';
+import {
+    fetchCart,
+    addItemToCart,
+    getCartTotalItems,
+} from '@/services/cart-service.js';
 import formatPrice from '@/helpers/format-price';
 import Loading from '@/components/loading';
 import TitleComponent from '@/components/title';
@@ -126,10 +130,9 @@ export default {
                 color: this.colorIri,
                 quantity: this.quantity,
             });
-            const currentItemsCount = parseInt(document.getElementById('js-cart-item-count').innerHTML, 10);
-            document.getElementById('js-cart-item-count').innerHTML = currentItemsCount + this.quantity;
             this.addToCartLoading = false;
             this.addToCartSuccess = true;
+            document.getElementById('js-cart-item-count').innerHTML = getCartTotalItems(this.cart);
         },
         colorChange(event) {
             this.colorIri = event;
