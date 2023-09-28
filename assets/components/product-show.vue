@@ -126,6 +126,8 @@ export default {
                 color: this.colorIri,
                 quantity: this.quantity,
             });
+            const currentItemsCount = parseInt(document.getElementById('js-cart-item-count').innerHTML, 10);
+            document.getElementById('js-cart-item-count').innerHTML = currentItemsCount + this.quantity;
             this.addToCartLoading = false;
             this.addToCartSuccess = true;
         },
