@@ -33,6 +33,7 @@
                         <div class="d-flex align-items-center justify-content-center">
                             <color-selector
                                 v-if="product.colors.length !== 0"
+                                @color-selected="colorChange"
                             />
                             <input
                                 v-model.number="quantity"
@@ -88,6 +89,7 @@ export default {
         return {
             cart: null,
             product: null,
+            colorIri: null,
             quantity: 1,
             loading: true,
             addToCartLoading: false,
@@ -112,15 +114,23 @@ export default {
     },
     methods: {
         async addToCart() {
+            if (this.product.colors && !this.colorIri) {
+                alert('Please select color');
+                return;
+            }
+
             this.addToCartLoading = true;
             this.addToCartSuccess = false;
             await addItemToCart(this.cart, {
                 product: this.product['@id'],
-                color: null,
+                color: this.colorIri,
                 quantity: this.quantity,
             });
             this.addToCartLoading = false;
             this.addToCartSuccess = true;
+        },
+        colorChange(event) {
+            this.colorIri = event;
         },
     },
 };
