@@ -44,7 +44,7 @@
                             <button
                                 class="btn btn-info btn-sm"
                                 :disabled="cart === null"
-                                @click="addToCart"
+                                @click="addToCart(product, colorIri, quantity)"
                             >
                                 Add to Cart
                                 <i
@@ -67,8 +67,7 @@
 <script>
 import { fetchProductById } from '@/services/products-service';
 import {
-    addItemToCart,
-    getCartTotalItems,
+
 } from '@/services/cart-service.js';
 import formatPrice from '@/helpers/format-price';
 import Loading from '@/components/loading';
@@ -98,8 +97,6 @@ export default {
             colorIri: null,
             quantity: 1,
             loading: true,
-            addToCartLoading: false,
-            addToCartSuccess: false,
         };
     },
     computed: {
@@ -115,23 +112,6 @@ export default {
         }
     },
     methods: {
-        async addToCart() {
-            if (this.product.colors.length && !this.colorIri) {
-                alert('Please select color');
-                return;
-            }
-
-            this.addToCartLoading = true;
-            this.addToCartSuccess = false;
-            await addItemToCart(this.cart, {
-                product: this.product['@id'],
-                color: this.colorIri,
-                quantity: this.quantity,
-            });
-            this.addToCartLoading = false;
-            this.addToCartSuccess = true;
-            document.getElementById('js-cart-item-count').innerHTML = getCartTotalItems(this.cart);
-        },
         colorChange(event) {
             this.colorIri = event;
         },
