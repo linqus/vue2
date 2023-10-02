@@ -67,7 +67,6 @@
 <script>
 import { fetchProductById } from '@/services/products-service';
 import {
-    fetchCart,
     addItemToCart,
     getCartTotalItems,
 } from '@/services/cart-service.js';
@@ -75,6 +74,7 @@ import formatPrice from '@/helpers/format-price';
 import Loading from '@/components/loading';
 import TitleComponent from '@/components/title';
 import ColorSelector from '@/components/color-selector';
+import ShoppingCartMixin from '@/mixins/get-shopping-cart.js';
 
 export default {
     name: 'ProductShow',
@@ -83,6 +83,9 @@ export default {
         TitleComponent,
         ColorSelector,
     },
+    mixins: [
+        ShoppingCartMixin,
+    ],
     props: {
         currentProductId: {
             type: String,
@@ -91,7 +94,6 @@ export default {
     },
     data() {
         return {
-            cart: null,
             product: null,
             colorIri: null,
             quantity: 1,
@@ -106,10 +108,6 @@ export default {
         },
     },
     async created() {
-        fetchCart().then((cart) => {
-            this.cart = cart;
-        });
-
         try {
             this.product = (await fetchProductById(this.currentProductId)).data;
         } finally {
@@ -118,7 +116,7 @@ export default {
     },
     methods: {
         async addToCart() {
-            if (this.product.colors && !this.colorIri) {
+            if (this.product.colors.length && !this.colorIri) {
                 alert('Please select color');
                 return;
             }
