@@ -72,9 +72,14 @@ export default {
     watch: {
         async cart() {
             const productIds = this.cart.items.map((item) => item.product);
-            this.products = (await fetchProductsById(productIds)).data['hydra:member'];
-            this.colors = (await fetchColors()).data['hydra:member'];
-            console.log(this.colors);
+
+            const [productsResponse, colorsResponse] = [
+                await fetchProductsById(productIds),
+                await fetchColors(),
+            ];
+
+            this.products = productsResponse.data['hydra:member'];
+            this.colors = colorsResponse.data['hydra:member'];
         },
     },
 
