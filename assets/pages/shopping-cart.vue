@@ -71,6 +71,17 @@ export default {
 
     watch: {
         async cart() {
+            this.loadProducts();
+        },
+    },
+
+    async created() {
+        const colorsResponse = await fetchColors();
+        this.colors = colorsResponse.data['hydra:member'];
+    },
+
+    methods: {
+        async loadProducts() {
             const productIds = this.cart.items.map((item) => item.product);
 
             const [productsResponse] = await Promise.all([
@@ -79,10 +90,6 @@ export default {
 
             this.products = productsResponse.data['hydra:member'];
         },
-    },
-    async created() {
-        const colorsResponse = await fetchColors();
-        this.colors = colorsResponse.data['hydra:member'];
     },
 
 };
