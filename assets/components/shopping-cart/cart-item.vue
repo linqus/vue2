@@ -4,7 +4,7 @@
             {{ item.product.name }}
         </div>
         <div class="col-3">
-            {{ item.quantity}}
+            {{ item.quantity }}
         </div>
         <div class="col-3">
             {{ formattedPrice(item.product.price) }}
