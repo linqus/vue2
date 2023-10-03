@@ -5,16 +5,16 @@
 
             <div class="col-xs-12 col-lg-9">
                 <title-component text="Shopping Cart" />
-                <loading v-if="cart === null" />
+                <loading v-if="completeCart === null" />
                 <div class="content p-3">
-                    <div v-if="cart !== null">
+                    <div v-if="completeCart !== null">
                         <div
-                            v-for="(item, index) in cart.items"
+                            v-for="(item, index) in completeCart.items"
                             :key="index"
                         >
-                            {{ item.product }} {{ item.quantity }} {{ index }}
+                            {{ item.product.name }} {{ item.color }} {{ index }}
                         </div>
-                        <div v-if="cart.items.length === 0">
+                        <div v-if="completeCart.items.length === 0">
                             Do some shopping!
                         </div>
                     </div>
@@ -39,18 +39,36 @@ export default {
     mixins: [
         ShoppingCartMixin,
     ],
-    watch: {
-        async cart() {
-            const productIds = this.cart.items.map((item) => item.product);
-            const products = (await fetchProductsById(productIds)).data['hydra:member'];
+
+    data() {
+        return {
+            products: null,
+        };
+    },
+
+    computed: {
+        completeCart() {
+            if (!this.cart || !this.products) {
+                return null;
+            }
+
             const completeItems = this.cart.items.map((item) => (
                 {
-                    product: products.find((i) => item.product === i['@id']),
+                    product: this.products.find((i) => item.product === i['@id']),
                     color: item.color,
                     quantity: item.quantity,
                 }
             ));
-            console.log(completeItems, products);
+            return {
+                items: completeItems,
+            };
+        },
+    },
+
+    watch: {
+        async cart() {
+            const productIds = this.cart.items.map((item) => item.product);
+            this.products = (await fetchProductsById(productIds)).data['hydra:member'];
         },
     },
 
